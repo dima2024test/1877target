@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>CreateAccount</name>
+        <label>New Account Action 1</label>
+        <locationX>182</locationX>
+        <locationY>134</locationY>
+        <actionName>NewAccount</actionName>
+        <actionType>quickAction</actionType>
+        <connector>
+            <targetReference>Wait_for_Amount_of_Time</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Name</name>
+            <value>
+                <stringValue>Test New Account</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>Phone</name>
+            <value>
+                <elementReference>Phone</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <apiVersion>61.0</apiVersion>
+    <constants>
+        <name>Phone</name>
+        <dataType>Number</dataType>
+        <value>
+            <numberValue>1.23456789E8</numberValue>
+        </value>
+    </constants>
+    <interviewLabel>Wait element test {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Wait element test</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Opp</name>
+        <label>Create Opp</label>
+        <locationX>182</locationX>
+        <locationY>350</locationY>
+        <connector>
+            <targetReference>Get_Account</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>CloseDate</field>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+        </inputAssignments>
+        <inputAssignments>
+            <field>StageName</field>
+        </inputAssignments>
+        <object>Opportunity</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Account</name>
+        <label>Get Account</label>
+        <locationX>182</locationX>
+        <locationY>458</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Wait_Configuration</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>CreatedDate</field>
+            <operator>GreaterThanOrEqualTo</operator>
+            <value>
+                <elementReference>$Flow.InterviewStartTime</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Acc</name>
+        <label>Update Acc</label>
+        <locationX>182</locationX>
+        <locationY>866</locationY>
+        <inputReference>Get_Account</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>CreateAccount</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <waits>
+        <description>Test Description - Wait Configuration</description>
+        <name>Wait_Configuration</name>
+        <label>Wait Configuration</label>
+        <locationX>182</locationX>
+        <locationY>566</locationY>
+        <defaultConnector>
+            <targetReference>Update_Acc</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Path</defaultConnectorLabel>
+        <waitEvents>
+            <name>Wait_Configuration_1_of_wqIT</name>
+            <conditionLogic>and</conditionLogic>
+            <connector>
+                <targetReference>Wait_Until_Date_1</targetReference>
+            </connector>
+            <eventType>DateRefAlarmEvent</eventType>
+            <inputParameters>
+                <name>TimeTableColumnEnumOrId</name>
+                <value>
+                    <stringValue>Account</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>TimeFieldColumnEnumOrId</name>
+                <value>
+                    <stringValue>CreatedDate</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>EntityObjectId</name>
+                <value>
+                    <elementReference>Get_Account.Id</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>TimeOffset</name>
+                <value>
+                    <numberValue>-1.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>TimeOffsetUnit</name>
+                <value>
+                    <stringValue>Hours</stringValue>
+                </value>
+            </inputParameters>
+            <label>Wait Configuration 1 of wqIT</label>
+        </waitEvents>
+    </waits>
+    <waits>
+        <description>Test  Wait for Amount of Time Description</description>
+        <name>Wait_for_Amount_of_Time</name>
+        <elementSubtype>WaitDuration</elementSubtype>
+        <label>Wait for Amount of Time</label>
+        <locationX>182</locationX>
+        <locationY>242</locationY>
+        <defaultConnectorLabel>Default Path</defaultConnectorLabel>
+        <waitEvents>
+            <conditionLogic>and</conditionLogic>
+            <connector>
+                <targetReference>Create_Opp</targetReference>
+            </connector>
+            <label>el_0</label>
+        </waitEvents>
+    </waits>
+    <waits>
+        <description>Test Description</description>
+        <name>Wait_Until_Date_1</name>
+        <elementSubtype>WaitDate</elementSubtype>
+        <label>Wait Until Date 1</label>
+        <locationX>50</locationX>
+        <locationY>674</locationY>
+        <defaultConnectorLabel>Default Path</defaultConnectorLabel>
+        <waitEvents>
+            <conditionLogic>and</conditionLogic>
+            <connector>
+                <targetReference>Update_Acc</targetReference>
+            </connector>
+            <label>el_1</label>
+        </waitEvents>
+    </waits>
+</Flow>
