@@ -117,7 +117,7 @@
         <locationX>50</locationX>
         <locationY>0</locationY>
         <object>Account</object>
-        <recordTriggerType>Update</recordTriggerType>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <scheduledPaths>
             <name>Test</name>
             <connector>
@@ -131,7 +131,7 @@
         </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Draft</status>
     <variables>
         <name>AccData</name>
         <dataType>SObject</dataType>
